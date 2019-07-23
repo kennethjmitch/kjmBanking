@@ -7,8 +7,13 @@ import org.junit.Test;
 public class testBankingApp {
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
+	public static void withdrawal(Customer cust) {
+		double cc=cust.balance;
+		System.out.println("withdrawal almount: ");
+		double yy=scan.nextDouble();
+		cust.setBalance(cc-yy);
+		Customers.add(cust);
+		System.out.println(cust.getBalance());
+		}
 
 }
