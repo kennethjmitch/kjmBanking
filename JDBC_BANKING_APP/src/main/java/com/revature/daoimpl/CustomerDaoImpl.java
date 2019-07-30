@@ -15,6 +15,7 @@ import com.revature.util.ConnFactory;
 
 public class CustomerDaoImpl implements CustomerDao{
 	public static ConnFactory cf= ConnFactory.getInstance();
+	public Scanner scanit = new Scanner(System.in);
 	
 	public void createCustomer(int accountNumb, String fName,int balance,String lName,String username,String password)throws SQLException{
 		Connection conn = cf.getConnection();
@@ -32,8 +33,6 @@ public class CustomerDaoImpl implements CustomerDao{
 	public List<Customer> getCustomerList() throws SQLException {
 		List<Customer> lcustt = new ArrayList<Customer>();
 		Connection conn= cf.getConnection();
-		//Statement- compiled on SQL side; generally terrible
-		//allows for SQLInjection
 		Statement stmt = conn.createStatement();
 		ResultSet rs= stmt.executeQuery("SELECT * FROM KENBANKING");
 		Customer s= null;
@@ -49,14 +48,9 @@ public class CustomerDaoImpl implements CustomerDao{
 		return lcustt;
 	}
 	
-	public List<Customer> getCustomer(String usname) throws SQLException {
-		
-	//	String anw = "YES";
-	//	while(anw=="YES") {
+	public List<Customer> getCustomer(String usname) throws SQLException {		
 		List<Customer> lcustt = new ArrayList<Customer>();
-		Connection conn= cf.getConnection();
-		//Statement- compiled on SQL side; generally terrible
-		//allows for SQLInjection
+		Connection conn= cf.getConnection();		
 		Statement stmt = conn.createStatement();
 		ResultSet rs= stmt.executeQuery("SELECT * FROM KENBANKING WHERE USERNAME ='"+usname+"'");
 		Customer s= null;
@@ -67,15 +61,13 @@ public class CustomerDaoImpl implements CustomerDao{
 			System.out.println(s.toString());
 		}
 		
-		
-		
-		
-		
-		System.out.println("WITHDRAW OR DEPOSIT");
+		String tzz = null;
+		do {
+			System.out.println("");
+		System.out.println("WITHDRAW    DEPOSIT    CANCEL");
 		Scanner look = new Scanner(System.in);
 		String choose = look.nextLine();
-		String an = "YES";
-		do {
+		
 		switch(choose.toUpperCase()) {
 		case "WITHDRAW":
 			System.out.println("enter withdrawal amnt: ");
@@ -91,26 +83,26 @@ public class CustomerDaoImpl implements CustomerDao{
 					+ "SET BALANCE='"+ balanc+"' "
 					+ "WHERE USERNAME='"+usname+"'");
 			break;
-	case "DEPOSIT":
-		System.out.println("enter deposit amnt: ");
-		int amS = look.nextInt();
-		balanc = balanc + amS;
-		System.out.println("debug: balance is "+balanc);
-		Statement asAtmt = conn.createStatement();
-		ResultSet dpAst = asAtmt.executeQuery(" UPDATE KENBANKING "
+    	case "DEPOSIT":
+    		System.out.println("enter deposit amnt: ");
+    		int amS = look.nextInt();
+    		balanc = balanc + amS;
+    		System.out.println("debug: balance is "+balanc);
+	   		Statement asAtmt = conn.createStatement();
+			ResultSet dpAst = asAtmt.executeQuery(" UPDATE KENBANKING "
 				+ "SET BALANCE='"+ balanc+"' "
 				+ "WHERE USERNAME='"+usname+"'");
 			break;
+    	case "CANCEL":
+    		System.out.println("    HAVE   A   GREAT   DAY !");
+    		break;
 		}
 		System.out.println("continue?");
-		an=look.nextLine();
-		}while(an.toUpperCase()=="YES");
-		
-		
-		
+		look=new Scanner(System.in);
+		tzz=look.nextLine();		
+		}while(tzz.equals("YES"));
 		rs.close();
-		rs=null;
-	
+		rs=null;	
 		return lcustt;
 		}
 	
